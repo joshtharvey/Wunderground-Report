@@ -58,21 +58,6 @@ remDr <- remoteDriver(
 remDr$navigate("http://www.google.com/")
 
 
-
-
-plot(fridge.prices)
-abline(coef(lm(price~cu.ft, fridge.prices)))
-
-
-new.price <- data.frame(cu.ft = c(15:22))
-pm<-predict(lm(price~cu.ft, fridge.prices), new.price)
-slopes <- cbind(c(15:22), pm)
-slopes
-points(19.1, 629, pch='x', col='red')
-abline(v=19.1, col='red')
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 url <- 'https://www.fidelity.com/fund-screener/evaluator.shtml#!&ft=BAL_all&ntf=N&expand=%24FundType&rsk=5'
 page <- GET(url)
 
