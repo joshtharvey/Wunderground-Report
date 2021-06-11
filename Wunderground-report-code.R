@@ -210,4 +210,4 @@ plot(tst$Time, tst$Temperature, type='l',las=1, ylim=c(50,120))
 rD$server$stop() #Close RSelenium server
 system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE) #Force quit Java processes
 
-
+#
