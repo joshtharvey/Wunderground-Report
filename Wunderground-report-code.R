@@ -90,7 +90,7 @@ weeks_dates <- Sys.Date()-c(6:0)
 rD<-rsDriver(port = 4444L, browser = 'firefox', check=TRUE)
 remDr <- rD$client
 
-# Define webpages ofterest
+# Define webpages of interest
 
 weekly.site <- paste0("https://www.wunderground.com/history/weekly/us/tx/uvalde/KUVA", "/", todays_date)
 
@@ -173,7 +173,19 @@ tamu.2
 
 # PT 2 - PLOTTING ///////////////////////////////////////////////////////////////////////////////////
 
-test<-as.data.frame(`hourly_table.2020-07-20`[[1]])
+test<-as.data.frame(`hourly_table.2021-06-07`[[1]])
+
+test<-get(paste0("hourly_table.",weeks_dates[3]), envir = .GlobalEnv)
+test<-as.data.frame(test[[1]])
+
+dput(test)
+
+
+
+
+
+
+
 plot(test[2,], xlim=c(0,50))
 plot.ts(test[c(1,2),])
 tempts <- ts(test[,c(1,2)])
