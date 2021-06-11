@@ -1,5 +1,5 @@
-library(robotstxt)
-library(rvest)
+library(robotstxt)   #paths_allowed
+library(rvest) # read_html; html_nodes
 library(selectr)
 library(xml2)
 library(dplyr)
@@ -11,17 +11,17 @@ library(ggplot2)
 library(lubridate)
 library(tibble)
 library(purrr)
-library(XML)
-library(RCurl)
-library(httr)
+library(XML) #readHTMLTable
+library(RCurl) # Certificate file
+library(httr) #GET(); content(); http_status
 library(RSelenium)
 #https://texaset.tamu.edu/DataSummary/Daily/81?daysInSummary=7
 
-
+#paths_allowed --> robotstxt
 paths_allowed(paths = c("https://texaset.tamu.edu/DataSummary/Daily/81?daysInSummary=7"), force=T)
 
 
-# Define certicificate file
+# Define certificate file
 cafile <- system.file("CurlSSL", "cacert.pem", package = "RCurl")
 
 page <- GET(
@@ -90,10 +90,6 @@ weeks_dates <- Sys.Date()-c(6:0)
 rD<-rsDriver(port = 4444L, browser = 'firefox', check=TRUE)
 remDr <- rD$client
 
-rD$server$stop()
-
-system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE)
-
 # Define webpages ofterest
 
 weekly.site <- paste0("https://www.wunderground.com/history/weekly/us/tx/uvalde/KUVA", "/", todays_date)
@@ -107,7 +103,7 @@ html <- read_html(remDr$getPageSource()[[1]])
 tables <- html_nodes(html, "table")
 weekly.summary <- html_table(tables[2], trim=T)
 
-weekly.summary[[1]]
+
 bb<-as.data.frame(weekly.summary)
 #Extract Daily Summary Tables
 
@@ -141,7 +137,6 @@ for(i in 1:7){
   remDr$navigate(paste0("https://www.wunderground.com/history/daily/us/tx/uvalde/KUVA", "/", weeks_dates[i]))
   Sys.sleep(5)
   html<-read_html(remDr$getPageSource()[[1]])
-  head(tables)
   tables <- html_nodes(html, "table")
   assign(paste0("daily_table.",weeks_dates[i]), html_table(tables[1], fill=T))
   assign(paste0("hourly_table.",weeks_dates[i]), html_table(tables[2], fill=T))
@@ -198,5 +193,9 @@ tst[,c(2:4,6:9)]<-lapply(tst[,c(2:4,6:9)], as.numeric)
 
 plot(tst$Time, tst$Temperature, type='l',las=1, ylim=c(50,120))
 
+
+
+rD$server$stop() #Close RSelenium server
+system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE) #Force quit Java processes
 
 
